@@ -5,7 +5,7 @@ pub fn a(in_stream: anytype) !u32 {
     var sum: u32 = 0;
     while (try in_stream.readUntilDelimiterOrEof(&buf, '\n')) |line| {
         const firstLetter = line[0];
-        const lastLetter = line[line.len-1];
+        const lastLetter = line[line.len - 1];
         const asciiOffset = 87;
 
         sum += if (std.mem.eql(u8, line, "A Y") or std.mem.eql(u8, line, "B Z") or std.mem.eql(u8, line, "C X"))
@@ -14,7 +14,6 @@ pub fn a(in_stream: anytype) !u32 {
             3
         else
             0;
-
         sum += lastLetter - asciiOffset;
     }
     return sum;
@@ -25,7 +24,7 @@ pub fn b(in_stream: anytype) !u32 {
     var sum: u32 = 0;
     while (try in_stream.readUntilDelimiterOrEof(&buf, '\n')) |line| {
         const firstLetter = line[0];
-        const lastLetter = line[line.len-1];
+        const lastLetter = line[line.len - 1];
         const asciiOffset = 64;
 
         sum += if (lastLetter == 'X')
