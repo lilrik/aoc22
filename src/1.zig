@@ -52,7 +52,7 @@ fn auxB(maxs: []u32, psum: *u32) void {
 }
 
 test "1" {
-    const in = 
+    const in =
         \\1000
         \\2000
         \\3000
@@ -72,7 +72,9 @@ test "1" {
     const currDir = std.fs.cwd();
     const path = "tmp";
     try currDir.writeFile(path, in);
-    defer currDir.deleteFile(path) catch |err| {std.debug.print("{}", .{err});};
+    defer currDir.deleteFile(path) catch |err| {
+        std.debug.print("{}", .{err});
+    };
     const file = try currDir.openFile(path, .{});
     defer file.close();
     var buf_reader = std.io.bufferedReader(file.reader());
@@ -81,5 +83,4 @@ test "1" {
     try std.testing.expect(try a(in_stream) == 24000);
     try file.seekTo(0);
     try std.testing.expect(try b(in_stream) == 45000);
-
 }
