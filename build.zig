@@ -1,8 +1,19 @@
 const std = @import("std");
 
-pub fn build(b: *std.build.Builder) void {
+pub fn build(b: *std.build.Builder) !void {
     const target = b.standardTargetOptions(.{});
     const mode = b.standardReleaseOptions();
+
+    // inject latest input from ./inputs into input.txt
+    const inputsDir = "./inputs";
+    var currDir = std.fs.cwd();
+    //defer currDir.close();
+    var dir = try currDir.openIterableDir(inputsDir, .{});
+    defer dir.close();
+    var it = dir.iterate();
+    var max = (try it.next()).?;
+    while (try it.next()) |entry| max = if (entry.name[0] > max.name[0]) entry else max;
+    try std.fs.Dir.copyFile(try currDir.openDir(inputsDir, .{}), max.name, currDir, "input.txt", .{});
 
     const exe = b.addExecutable("aoc22", "src/main.zig");
     exe.setTarget(target);

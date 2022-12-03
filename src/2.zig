@@ -3,6 +3,7 @@ const std = @import("std");
 pub fn a(in_stream: anytype) !u32 {
     var buf: [4]u8 = undefined;
     var sum: u32 = 0;
+
     while (try in_stream.readUntilDelimiterOrEof(&buf, '\n')) |line| {
         const firstLetter = line[0];
         const lastLetter = line[line.len - 1];
@@ -16,6 +17,7 @@ pub fn a(in_stream: anytype) !u32 {
             0;
         sum += lastLetter - asciiOffset;
     }
+
     return sum;
 }
 
@@ -27,15 +29,14 @@ pub fn b(in_stream: anytype) !u32 {
         const lastLetter = line[line.len - 1];
         const asciiOffset = 64;
 
-        sum += if (lastLetter == 'X')
-            0 + if (firstLetter == 65) firstLetter + 2 - asciiOffset else firstLetter - 1 - asciiOffset
-        else if (lastLetter == 'Y')
-            3 + firstLetter - asciiOffset
-        else if (lastLetter == 'Z')
-            6 + if (firstLetter == 67) firstLetter - 2 - asciiOffset else firstLetter + 1 - asciiOffset
-        else
-            0;
+        sum += switch (lastLetter) {
+            'X' => 0 + if (firstLetter == 65) firstLetter + 2 - asciiOffset else firstLetter - 1 - asciiOffset,
+            'Y' => 3 + firstLetter - asciiOffset,
+            'Z' => 6 + if (firstLetter == 67) firstLetter - 2 - asciiOffset else firstLetter + 1 - asciiOffset,
+            else => 0,
+        };
     }
+
     return sum;
 }
 
