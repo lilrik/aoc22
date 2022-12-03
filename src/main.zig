@@ -1,5 +1,5 @@
 const std = @import("std");
-const current = @import("2.zig");
+const current = @import("3.zig");
 
 pub fn main() !void {
     // get input
@@ -10,6 +10,7 @@ pub fn main() !void {
 
     // print result
     const stdout = std.io.getStdOut().writer();
+    //try stdout.print("{d}\n", .{try current.a(&in_stream)});
     try stdout.print("{d}\n", .{try current.b(&in_stream)});
 }
 
