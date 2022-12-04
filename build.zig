@@ -4,18 +4,25 @@ pub fn build(b: *std.build.Builder) !void {
     const target = b.standardTargetOptions(.{});
     const mode = b.standardReleaseOptions();
 
-    // inject latest input from ./inputs into input.txt
-    const inputsDir = "./inputs";
-    var currDir = std.fs.cwd();
-    //defer currDir.close();
-    var dir = try currDir.openIterableDir(inputsDir, .{});
-    defer dir.close();
-    var it = dir.iterate();
-    var max = (try it.next()).?;
-    while (try it.next()) |entry| max = if (entry.name[0] > max.name[0]) entry else max;
-    try std.fs.Dir.copyFile(try currDir.openDir(inputsDir, .{}), max.name, currDir, "input.txt", .{});
+    // open iter dir
+    var inputs_iter_dir = try std.fs.cwd().openIterableDir("./inputs", .{});
+    defer inputs_iter_dir.close();
+
+    // get latest input name
+    var it = inputs_iter_dir.iterate();
+    var latest_file_name: []const u8 = &[_]u8{0}; // placeholder
+    while (try it.next()) |entry| {
+        const curr_file_name = entry.name;
+        if (!std.mem.eql(u8, curr_file_name, "input.txt") and curr_file_name[0] > latest_file_name[0])
+            latest_file_name = curr_file_name;
+    }
+
+    // inject latest input into input.txt
+    const inputs_dir = inputs_iter_dir.dir;
+    try std.fs.Dir.copyFile(inputs_dir, latest_file_name, inputs_dir, "input.txt", .{});
 
     const exe = b.addExecutable("aoc22", "src/main.zig");
+    exe.use_stage1 = true; // embed only works with paths outside package in stage1 compiler
     exe.setTarget(target);
     exe.setBuildMode(mode);
     exe.install();

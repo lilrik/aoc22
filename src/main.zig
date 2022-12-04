@@ -2,16 +2,19 @@ const std = @import("std");
 const current = @import("3.zig");
 
 pub fn main() !void {
-    // get input
-    const input = try std.fs.cwd().openFile("input.txt", .{});
-    defer input.close();
-    var buf_reader = std.io.bufferedReader(input.reader());
-    var in_stream = buf_reader.reader();
+    const input = @embedFile("../inputs/input.txt");
+    var res: ?u32 = null;
 
-    // print result
     const stdout = std.io.getStdOut().writer();
-    //try stdout.print("{d}\n", .{try current.a(&in_stream)});
-    try stdout.print("{d}\n", .{try current.b(&in_stream)});
+    inline for (@typeInfo(current).Struct.decls) |decl| {
+        const first_letter = if (decl.name.len == 1) decl.name[0] else 0;
+        switch (first_letter) {
+            'a' => res = try current.a(input),
+            'b' => res = try current.b(input),
+            else => res = null,
+        }
+        if (res) |r| try stdout.print("{d}\n", .{r});
+    }
 }
 
 test {
