@@ -8,7 +8,7 @@ pub fn build(b: *std.build.Builder) !void {
     var inputs_iter_dir = try std.fs.cwd().openIterableDir("./inputs", .{});
     defer inputs_iter_dir.close();
 
-    // get latest input name
+    // get latest input name (<biggest num>.txt)
     var it = inputs_iter_dir.iterate();
     var latest_file_name: []const u8 = &[_]u8{0}; // placeholder
     while (try it.next()) |entry| {
