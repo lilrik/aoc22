@@ -1,5 +1,5 @@
 const std = @import("std");
-const current = @import("6.zig");
+const current = @import("7.zig");
 
 pub fn main() !void {
     const input = @embedFile("../inputs/input.txt");

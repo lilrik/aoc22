@@ -5,7 +5,7 @@ pub fn build(b: *std.build.Builder) !void {
     const mode = b.standardReleaseOptions();
 
     // open iter dir
-    var inputs_iter_dir = try std.fs.cwd().openIterableDir("./inputs", .{});
+    var inputs_iter_dir = try std.fs.cwd().openIterableDir("inputs", .{});
     defer inputs_iter_dir.close();
 
     // get latest input name (<biggest num>.txt)

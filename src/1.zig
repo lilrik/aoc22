@@ -30,6 +30,7 @@ pub fn b(input: []const u8) !u32 {
         sum += try std.fmt.parseInt(u32, line, 0);
     }
     addToTop3(&maxs, sum);
+    // @Vector copies everything: slow but convenient
     const maxs_vec: @Vector(maxs.len, u32) = maxs;
     return @reduce(.Add, maxs_vec);
 }
