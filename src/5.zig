@@ -128,3 +128,20 @@ pub fn b(input: []const u8) ![]const u8 {
 
     return answer.items;
 }
+
+test "5" {
+    const input =
+        \\    [D]
+        \\[N] [C]    
+        \\[Z] [M] [P]
+        \\ 1   2   3 
+        \\
+        \\move 1 from 2 to 1
+        \\move 3 from 1 to 3
+        \\move 2 from 2 to 1
+        \\move 1 from 1 to 2
+    ;
+
+    try std.testing.expectEqualStrings("CMZ", try a(input));
+    try std.testing.expectEqualStrings("MCD", try b(input));
+}
