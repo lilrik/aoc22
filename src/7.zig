@@ -205,7 +205,7 @@ fn calcFinalAnsB(node: *DirNode, size_to_del: u32) u32 {
 }
 
 test "7" {
-    const input = 
+    const input =
         \\$ cd /
         \\$ ls
         \\dir a
@@ -229,8 +229,8 @@ test "7" {
         \\8033020 d.log
         \\5626152 d.ext
         \\7214296 k
-        ;
+    ;
 
-        try std.testing.expect(try a(input) == 95437);
-        try std.testing.expect(try b(input) == 24933642);
+    try std.testing.expect(try a(input) == 95437);
+    try std.testing.expect(try b(input) == 24933642);
 }

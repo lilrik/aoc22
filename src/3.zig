@@ -25,7 +25,8 @@ pub fn a(input: []const u8) !u32 {
 
 pub fn b(input: []const u8) !u32 {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    var map = std.AutoHashMap(u8, [2]u32).init(gpa.allocator()); // TODO: lookup how to do tuples
+    const Pair = std.meta.Tuple(&[_]type{ u32, u32 });
+    var map = std.AutoHashMap(u8, Pair).init(gpa.allocator());
     defer map.deinit();
     var sum: u32 = 0;
     var i: u32 = 0;
@@ -34,7 +35,8 @@ pub fn b(input: []const u8) !u32 {
     while (it.next()) |line| : (i += 1) {
         const lastLineOfGroup = @mod(i + 1, 3) == 0;
         for (line) |c| {
-            var appearances = map.get(c) orelse [2]u32{ 0, i };
+            var zero: u32 = 0; // because of the comptime error
+            var appearances = map.get(c) orelse .{ zero, i };
             if (appearances[0] == 0 or i > appearances[1]) {
                 appearances[0] += 1;
                 appearances[1] = i;
