@@ -36,7 +36,7 @@ pub fn b(input: []const u8) !u32 {
         const lastLineOfGroup = @mod(i + 1, 3) == 0;
         for (line) |c| {
             var zero: u32 = 0; // because of the comptime error
-            var appearances = map.get(c) orelse .{ zero, i };
+            var appearances = map.get(c) orelse Pair{ zero, i };
             if (appearances[0] == 0 or i > appearances[1]) {
                 appearances[0] += 1;
                 appearances[1] = i;
